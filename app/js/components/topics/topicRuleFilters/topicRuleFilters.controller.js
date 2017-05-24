@@ -8,10 +8,9 @@ var componentsModule = require('../../');
 function topicRuleFiltersCtrl($scope, FilterService, Events, Group) {
 
     $scope.resetFilters = function () {
-        FilterService.clearAll();
         Group.setCurrent({});
         $scope.$emit('group:change', {});
-        $scope.$broadcast(Events.filters.reset);
+        $scope.$broadcast(Events.topicFilters.reset);
     };
 }
 

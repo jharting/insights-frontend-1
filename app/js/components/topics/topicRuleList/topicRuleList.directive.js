@@ -9,6 +9,7 @@ function topicRuleListCtrl ($filter,
                             $rootScope,
                             $scope,
                             $state,
+                            Events,
                             IncidentsService,
                             InsightsConfig,
                             ListTypeService,
@@ -58,8 +59,15 @@ function topicRuleListCtrl ($filter,
         updateList(topic);
     });
 
-    $scope.$on('topicFilters:filterIncidents', function () {
+    // Listens for change in incidents filter
+    $scope.$on(Events.topicFilters.incident, function () {
         $scope.filterIncidents = $location.search().filterIncidents;
+        updateList($scope.topic);
+    });
+
+    // Listens for Reset filters
+    $scope.$on(Events.topicFilters.reset, function () {
+        $scope.filterIncidents = 'all';
         updateList($scope.topic);
     });
 

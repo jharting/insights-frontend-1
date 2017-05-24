@@ -5,11 +5,15 @@ var componentsModule = require('../../');
 /**
  * @ngInject
  */
-function incidentsTriStateCtrl($location, $rootScope, $scope) {
+function incidentsTriStateCtrl($location, $rootScope, $scope, Events) {
     $scope.filterIncidents = function () {
         $location.search().filterIncidents = $scope.showIncidents;
-        $rootScope.$broadcast('topicFilters:filterIncidents');
+        $rootScope.$broadcast(Events.topicFilters.incident);
     };
+
+    $scope.$on(Events.topicFilters.reset, function () {
+        $scope.showIncidents = 'all';
+    });
 }
 
 function incidentsTriState() {
