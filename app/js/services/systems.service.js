@@ -90,6 +90,12 @@ function SystemsService($filter,
     };
 
     systemsService.getSystemFacts = function (system, metadata) {
+        var server_type = get(metadata, 'system_information.product_name');
+        var virtual_machines = ['VMware Virtual Platform',
+                                   'VirtualBox',
+                                   'KVM',
+                                   'Bochs',
+                                   'Virtual Machine'];
 
         // add system data
         var systemData = [];
@@ -97,10 +103,11 @@ function SystemsService($filter,
             label: 'OS',
             value: $filter('productShortName')(get(metadata, 'release'))
         });
-        systemData.push({
-            label: 'Hardware Platform',
-            value: getHardwarePlatform(metadata)
-        });
+
+        // systemData.push({
+        //     label: 'Hardware Platform',
+        //     value: getHardwarePlatform(metadata)
+        // });
 
         if (system.product_code === Products.docker.code) {
             if (system.role === Products.docker.roles.container.code) {
@@ -145,6 +152,43 @@ function SystemsService($filter,
             value: $filter('timeAgo')(get(system, 'last_check_in'))
         });
 
+        if (virtual_machines.indexOf(server_type) !== -1) {
+            systemData.push({
+                label: 'Server Type',
+                value: 'Virtual'
+            });
+
+            systemData.push({
+                label: 'Server Provider',
+                value: get(metadata, 'system_information.product_name')
+            });
+        } else if (server_type) {
+            systemData.push({
+                label: 'Server Type',
+                value: 'Physical'
+            });
+        }
+
+        systemData.push({
+            label: 'Vendor',
+            value: get(metadata, 'system_information.manufacturer')
+        });
+
+        systemData.push({
+            label: 'Model',
+            value: get(metadata, 'system_information.family')
+        });
+
+        systemData.push({
+            label: 'Version',
+            value: get(metadata, 'system_information.version')
+        });
+
+        systemData.push({
+            label: 'Serial Number',
+            value: get(metadata, 'system_information.serial_number')
+        });
+
         // remove items that are undefined
         arrayRemove(systemData, function (n) {
             return n.value === undefined ||
@@ -157,30 +201,30 @@ function SystemsService($filter,
             systemData.slice(Math.ceil(systemData.length / 2), systemData.length)];
     };
 
-    function getHardwarePlatform (metadata) {
-        var systemInfoProperties = ['system_information.product_name',
-                                'system_information.version',
-                                'system_information.family',
-                                'system_information.manufacturer'];
-        var i = 0;
-        var value = get(metadata, systemInfoProperties[systemInfoProperties.length - 1]);
+    // function getHardwarePlatform (metadata) {
+    //     var systemInfoProperties = ['system_information.product_name',
+    //                             'system_information.version',
+    //                             'system_information.family',
+    //                             'system_information.manufacturer'];
+    //     var i = 0;
+    //     var value = get(metadata, systemInfoProperties[systemInfoProperties.length - 1]);
 
-        // intentionally skips over last element
-        // since the value is set to it by default
-        // if none of the other elements have whitespace
-        for (i = 0; i < systemInfoProperties.length - 1; i++) {
+    //     // intentionally skips over last element
+    //     // since the value is set to it by default
+    //     // if none of the other elements have whitespace
+    //     for (i = 0; i < systemInfoProperties.length - 1; i++) {
 
-            // we don't care about first character whitespace
-            if (get(metadata, systemInfoProperties[i]) &&
-                get(metadata, systemInfoProperties[i]).substring(1).indexOf(' ') >= 0) {
+    //         // we don't care about first character whitespace
+    //         if (get(metadata, systemInfoProperties[i]) &&
+    //             get(metadata, systemInfoProperties[i]).substring(1).indexOf(' ') >= 0) {
 
-                value = get(metadata, systemInfoProperties[i]);
-                break;
-            }
-        }
+    //             value = get(metadata, systemInfoProperties[i]);
+    //             break;
+    //         }
+    //     }
 
-        return value;
-    }
+    //     return value;
+    // }
 
     systemsService.populateNewestSystems = function (product) {
         let parameters = {
