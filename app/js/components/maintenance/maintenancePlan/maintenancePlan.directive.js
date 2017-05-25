@@ -19,8 +19,6 @@ function maintenancePlanCtrl(
     $scope,
     $timeout,
     gettextCatalog,
-    AnsibleAPIErrors,
-    AnsibleErrors,
     DataUtils,
     Group,
     Maintenance,
