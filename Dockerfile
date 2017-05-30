@@ -1,4 +1,4 @@
-from convergenceregistry.a1.vary.redhat.com/rhel7-platops-nginx
+FROM nginx:alpine
 
 ADD app/index.html /usr/share/nginx/html/insights/
 ADD release /usr/share/nginx/html/insights/
