@@ -1,9 +1,5 @@
-from convergenceregistry.a1.vary.redhat.com/rhel7-platops-nginx
+FROM nginx:alpine
+COPY insights.conf /etc/nginx/conf.d/insights.conf
+COPY build /www-real
+RUN  mkdir /www && ln -s /www-real/index.html /www && ln -s /www-real/indexbeta.html /www && ln -s /www-real /www/insights && ln -s /www-real /www/insightsbeta
 
-ADD app/index.html /usr/share/nginx/html/insights/
-ADD release /usr/share/nginx/html/insights/
-ADD insights.conf /etc/nginx/default.d/
-
-EXPOSE 80
-
-CMD ["/usr/sbin/nginx"]
