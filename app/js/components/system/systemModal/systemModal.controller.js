@@ -16,7 +16,8 @@ function SystemModalCtrl(
     rule,
     AnalyticsService,
     Utils,
-    FilterService) {
+    FilterService,
+    System) {
 
     $scope.report = {};
 
@@ -70,6 +71,10 @@ function SystemModalCtrl(
 
         return $scope.system.system_id;
     };
+
+    System.getSystemGroups($scope.getUUID()).success(function (groups) {
+        $scope.groups = groups;
+    });
 }
 
 componentsModule.controller('SystemModalCtrl', SystemModalCtrl);
