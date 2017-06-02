@@ -61,7 +61,11 @@ function SweetAlert($rootScope, $q) {
             confirmButtonText: 'Yes',
             html: true,
             showCancelButton: true
-        })
+        }),
+
+        unwrap: function () {
+            return swal;
+        }
     };
 }
 

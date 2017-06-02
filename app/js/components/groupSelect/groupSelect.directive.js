@@ -2,11 +2,12 @@
 
 var componentsModule = require('../');
 var isEmpty = require('lodash/isEmpty');
+const some = require('lodash/some');
 
 /**
  * @ngInject
  */
-function groupSelectCtrl($scope, $rootScope, Group, Events) {
+function groupSelectCtrl($scope, $rootScope, gettextCatalog, Group, Events, SweetAlert) {
     Group.init();
     $scope.groups = Group.groups;
     $scope.group = Group.current();
@@ -28,6 +29,36 @@ function groupSelectCtrl($scope, $rootScope, Group, Events) {
     $scope.$on(Events.filters.reset, function () {
         $scope.group = Group.current();
     });
+
+    $scope.createGroup = function () {
+        SweetAlert.swal({
+            title: gettextCatalog.getString('Create group'),
+            type: 'input',
+            showCancelButton: true,
+            confirmButtonColor: '#DD6B55',
+            confirmButtonText: gettextCatalog.getString('Create'),
+            closeOnConfirm: false
+        }, function (name) {
+            if (!name || typeof name !== 'string' || !name.length) {
+                SweetAlert.unwrap().showInputError(
+                    gettextCatalog.getString('Please specify a group name'));
+                return false;
+            }
+
+            if (some(Group.groups, function (group) {
+                return group.display_name === name
+            })) {
+                SweetAlert.unwrap().showInputError(
+                    gettextCatalog.getString('Name already used'));
+                return false;
+            }
+
+            return Group.createGroup({
+                display_name: name
+            }).then(SweetAlert.unwrap().close);
+
+        });
+    }
 }
 
 function groupSelect() {
