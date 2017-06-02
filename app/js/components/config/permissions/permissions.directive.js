@@ -11,7 +11,7 @@ var uniq = require('lodash/uniq');
 function configPermissionsCtrl(
     $scope,
     $q,
-    SweetAlert,
+    swangular,
     UserPermissions,
     Permission,
     User) {
@@ -25,8 +25,7 @@ function configPermissionsCtrl(
         type: 'warning',
         showCancelButton: true,
         confirmButtonColor: '#DD6B55',
-        confirmButtonText: 'Yes, delete it!',
-        closeOnConfirm: true
+        confirmButtonText: 'Yes, delete it!'
     };
 
     priv.removeAll = function (data) {
@@ -67,11 +66,9 @@ function configPermissionsCtrl(
             conf.text = 'Delete yourself?? Remember... no dumb here!';
         }
 
-        SweetAlert.swal(conf, function (confirm) {
-            if (confirm) {
-                priv.removeAll(data);
-            }
-        });
+        swangular.swal(conf).then(function () {
+            priv.removeAll(data);
+        }).catch(swal.noop);
     };
 
     $scope.init = function () {

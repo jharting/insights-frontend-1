@@ -19,13 +19,13 @@ function maintenancePlanCtrl(
     $scope,
     $timeout,
     gettextCatalog,
+    swangular,
     AnsibleAPIErrors,
     AnsibleErrors,
     DataUtils,
     Group,
     Maintenance,
     MaintenanceService,
-    SweetAlert,
     SystemsService,
     Utils) {
 
@@ -85,21 +85,18 @@ function maintenancePlanCtrl(
     });
 
     $scope.delete = function () {
-        SweetAlert.swal({
+        swangular.swal({
             title: gettextCatalog.getString('Are you sure?'),
             text: gettextCatalog.getString(
                 'You will not be able to recover this maintenance plan'),
             type: 'warning',
-            html: true,
             confirmButtonColor: '#DD6B55',
             confirmButtonText: 'Yes',
             showCancelButton: true
-        }, $scope.loader.bind(function (isConfirm) {
-            if (isConfirm) {
-                $scope.edit.deactivate($scope.plan.maintenance_id);
-                return Maintenance.deletePlan($scope.plan);
-            }
-        }));
+        }).then($scope.loader.bind(function (value) {
+            $scope.edit.deactivate($scope.plan.maintenance_id);
+            return Maintenance.deletePlan($scope.plan);
+        })).catch(swal.noop);
     };
 
     $scope.showSystemModal = MaintenanceService.showSystemModal;
@@ -252,20 +249,17 @@ function maintenancePlanCtrl(
         }
 
         if (!value) {
-            SweetAlert.swal({
+            swangular.swal({
                 title: gettextCatalog.getString('Are you sure?'),
                 text: gettextCatalog.getString(
                     'You are about to send a plan suggestion to the customer.'),
                 type: 'warning',
-                html: true,
                 confirmButtonColor: '#DD6B55',
                 confirmButtonText: 'Yes',
                 showCancelButton: true
-            }, function (isConfirm) {
-                if (isConfirm) {
-                    cb();
-                }
-            });
+            })
+            .then(cb)
+            .catch(swal.noop);
         } else {
             cb();
         }
@@ -373,7 +367,7 @@ function maintenancePlan($document) {
                     return;  // clicking on a modal does not retract a plan
                 }
 
-                if (isContainedBy($event, 'sweet-alert')) {
+                if (isContainedBy($event, 'swal2-container')) {
                     return;  // clicking on a sweet-alert does not retract a plan
                 }
 

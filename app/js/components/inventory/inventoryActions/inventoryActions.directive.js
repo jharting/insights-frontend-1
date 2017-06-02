@@ -83,7 +83,7 @@ function inventoryActionsCtrl(
                     '1 system cannot be unregistered',
                     '{{count}} systems cannot be unregistered',
                     {count: parts[1].length});
-                opts.text = text;
+                opts.html = text;
 
                 return SweetAlert.swal(opts);
             }).then(function (decision) {

@@ -5,7 +5,7 @@ var componentsModule = require('../');
 /**
  * @ngInject
  */
-function groupCtrl($scope, SweetAlert, Group, gettextCatalog) {
+function groupCtrl($scope, swangular, Group, gettextCatalog) {
     $scope.isCollapsed = false;
 
     $scope.deleteGroup = function (group) {
@@ -13,20 +13,16 @@ function groupCtrl($scope, SweetAlert, Group, gettextCatalog) {
             'You will not be able to recover <code>{{name}}</code>', {
                 name: group.display_name
             });
-        SweetAlert.swal({
-                title: 'Are you sure?',
-                text: message,
-                type: 'warning',
-                html: true,
-                confirmButtonColor: '#DD6B55',
-                confirmButtonText: 'Yes',
-                showCancelButton: true
-            },
-            function (isConfirm) {
-                if (isConfirm) {
-                    Group.deleteGroup(group);
-                }
-            });
+        swangular.swal({
+            title: 'Are you sure?',
+            type: 'warning',
+            html: message,
+            confirmButtonColor: '#DD6B55',
+            confirmButtonText: 'Yes',
+            showCancelButton: true
+        }).then(function () {
+            Group.deleteGroup(group);
+        }).catch(swal.noop);
     };
 }
 

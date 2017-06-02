@@ -11,10 +11,11 @@ var reject = require('lodash/reject');
  */
 function MaintenanceTable(
     $scope,
+    $q,
     $filter,
     Utils,
     MaintenanceService,
-    SweetAlert,
+    swangular,
     gettextCatalog) {
 
     var ctrl = this;
@@ -44,7 +45,8 @@ function MaintenanceTable(
                 [MaintenanceService.MAINTENANCE_ACTION_TYPE.PLANNED_ELSEWHERE];
 
             if (overlapCount) {
-                return SweetAlert.swal({
+                const def = $q.defer();
+                swangular.swal({
                     title: gettextCatalog.getString('Select overlapping actions?'),
                     text: gettextCatalog.getPlural(overlapCount,
                         'This selection contains an action that  ' +
@@ -59,18 +61,27 @@ function MaintenanceTable(
                     confirmButtonText: 'Yes',
                     showCancelButton: true,
                     cancelButtonText: 'No'
-                }, function (isConfirm) {
-                    var actions = ctrl.filteredActions;
-                    if (!isConfirm) {
-                        actions =
-                            reject(actions, {
-                                _type: MaintenanceService.
-                                    MAINTENANCE_ACTION_TYPE.PLANNED_ELSEWHERE
-                            });
-                    }
+                }).then(def.resolve).catch(def.reject);
 
+                def.promise.then(function () {
+                    console.log('resolved');
+                    $scope.checkboxes.checkboxChecked($scope.checkboxes.checked, ctrl.filteredActions);
+                })
+                /*
+                .catch(function () {
+                    console.log('2');
+                    return reject(ctrl.filteredActions, {
+                        _type: MaintenanceService.
+                        MAINTENANCE_ACTION_TYPE.PLANNED_ELSEWHERE
+                    });
+                }).then(function (actions) {
+                    console.log('3');
+                    console.log(actions);
                     $scope.checkboxes.checkboxChecked($scope.checkboxes.checked, actions);
+                    console.log('should be checked');
                 });
+                */
+                return;
             }
         }
 

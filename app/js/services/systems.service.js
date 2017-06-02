@@ -10,9 +10,9 @@ function SystemsService($filter,
                         $rootScope,
                         $q,
                         gettextCatalog,
+                        swangular,
                         Group,
                         Products,
-                        SweetAlert,
                         System) {
     var systemsService = {};
     var _newestSystems = null;
@@ -51,7 +51,6 @@ function SystemsService($filter,
 
     function unregisterSystems(systems) {
         var count = systems.length;
-        var masterP = $q.defer();
         var promises = [];
         var systemDelete;
         var message = gettextCatalog.getPlural(
@@ -60,29 +59,23 @@ function SystemsService($filter,
             _UNREGISTER_TEXT_MULTI,
             { count: count });
 
-        SweetAlert.swal({
+        return swangular.swal({
             title: 'Are you sure?',
-            text: message,
             type: 'warning',
             confirmButtonColor: '#DD6B55',
             confirmButtonText: 'Yes',
-            html: true,
+            html: message,
             showCancelButton: true
-        }, function (isConfirm) {
-            if (isConfirm) {
-                for (let i = 0; i < count; i++) {
-                    systemDelete = System.deleteSystem(systems[i].system_id);
-                    promises.push(systemDelete);
-                }
-
-                $q.all(promises).then(function () {
-                    $rootScope.$broadcast('systems:unregistered');
-                    masterP.resolve();
-                });
+        }).then(function () {
+            for (let i = 0; i < count; i++) {
+                systemDelete = System.deleteSystem(systems[i].system_id);
+                promises.push(systemDelete);
             }
-        });
 
-        return masterP.promise;
+            return $q.all(promises).then(function () {
+                $rootScope.$broadcast('systems:unregistered');
+            });
+        }).catch(swal.noop);
     }
 
     systemsService.unregisterSelectedSystems = function (systems) {

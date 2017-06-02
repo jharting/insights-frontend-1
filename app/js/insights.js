@@ -23,6 +23,9 @@ require('angular-datepicker');
 require('ng-tags-input');
 require('ngInfiniteScroll');
 
+window.swal = require('sweetalert2'); // TODO do we need to do this?
+require('swangular');
+
 require('./components/ui-bootstrap-custom');
 
 // app modules
@@ -55,7 +58,8 @@ let requires = [
     'ui.gravatar',
     'datePicker',
     'ngTagsInput',
-    'infinite-scroll'
+    'infinite-scroll',
+    'swangular'
 ];
 
 if (isPortal) {

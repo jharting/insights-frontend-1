@@ -1,7 +1,7 @@
 'use strict';
 
 var servicesModule = require('./');
-var swal = require('sweetalert');
+var swal = require('sweetalert2');
 
 /**
  * @ngInject
@@ -9,6 +9,8 @@ var swal = require('sweetalert');
 function SweetAlert($rootScope, $q) {
     return {
         swal: function (arg1, arg2, arg3) {
+            return swal.swal(arguments);
+            /*
             const defer = $q.defer();
             $rootScope.$evalAsync(function () {
                 if (typeof (arg2) === 'function') {
@@ -25,9 +27,9 @@ function SweetAlert($rootScope, $q) {
                 } else {
                     swal(arg1, arg2, arg3);
                 }
-            });
+            });*/
 
-            return defer.promise;
+            //return defer.promise;
         },
 
         success: function (title, message) {
@@ -59,7 +61,6 @@ function SweetAlert($rootScope, $q) {
             type: 'warning',
             confirmButtonColor: '#DD6B55',
             confirmButtonText: 'Yes',
-            html: true,
             showCancelButton: true
         })
     };

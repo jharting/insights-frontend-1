@@ -12,7 +12,8 @@
     "express": "~4.15.2",
     "file-saver": "~1.3.3",
     "morgan": "~1.8.1",
-    "parse-http-header": "~1.0.0"
+    "parse-http-header": "~1.0.0",
+    "swangular": "^1.3.9"
   },
   "devDependencies": {
     "babel-preset-es2015-without-strict": "~0.0.x",
