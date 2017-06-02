@@ -52,8 +52,9 @@ section.inventory
                   value='isFixableSelected() && (plans.future.length || plans.unscheduled.length)',
                   show-tooltip='false')
               li
-                a(translate) Add to System Group
-              // TODO: when disabled?
+                a(translate,
+                  translate-n='systemsToAction().length',
+                  translate-plural='Add systems to group') Add system to group
               li(ng-if='Group.current().id')
                 a(ng-click='removeFromGroup()')
                   span(translate,

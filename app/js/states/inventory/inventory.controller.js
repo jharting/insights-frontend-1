@@ -485,6 +485,11 @@ function InventoryCtrl(
         };
         $scope.showActions(system, true);
     }
+
+    $scope.reloadInventory = function () {
+        cleanTheScope();
+        getData(false);
+    };
 }
 
 statesModule.controller('InventoryCtrl', InventoryCtrl);

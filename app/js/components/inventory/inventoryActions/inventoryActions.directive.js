@@ -221,9 +221,7 @@ function inventoryActionsCtrl(
 
     $scope.removeFromGroup = function () {
         Group.removeSystems(Group.current(), map($scope.systemsToAction(), 'system_id'))
-        .then(function () {
-            // TODO reload inventory!!!!
-        });
+            .then($scope.reloadInventory);
     };
 }
 
