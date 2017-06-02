@@ -32,6 +32,8 @@ function InventoryCtrl(
         Export,
         Group) {
 
+    $scope.Group = Group;
+
     function updateParams(params) {
         params = FilterService.updateParams(params);
         if (!params.sort_field) {
