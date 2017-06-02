@@ -12,7 +12,7 @@
               .count(translate, translate-n='plugin.hitCount', translate-plural="{{$count}} Systems") 1 System
               .pull-right
                 span.label.label-default.inline-right.rule-inactive(ng-if='plugin.acked', translate) INACTIVE
-                incident-icon.inline-right(rule='plugin.rule') &nbsp;
+                incident-icon.inline-right(rule-id='plugin.rule.rule_id') &nbsp;
                 ansible-icon(value='plugin.rule.ansible', ng-if='config.isPlannerEnabled')
             card-content
               .gray(ng-bind-html='::plugin.rule.summary_html', target-blank='')
@@ -57,7 +57,7 @@
               div(ng-if='rule.acked')
                 | {{rule.description}}
                 span.label.label-default.inline-left.rule-inactive(translate) INACTIVE
-              incident-icon.pull-right(rule='rule')
+              incident-icon.pull-right(rule-id='rule.rule_id')
 
             // START UBER-SEV
             td.filter-on.text-center.align-vertical(ng-click='viewImpactedSystems(topic.slug ? topic.slug : topic.id, rule.rule_id)')
